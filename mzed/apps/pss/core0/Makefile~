@@ -5,38 +5,29 @@ CC_FLAGS :=
 CFLAGS := 
 LN_FLAGS := -lrsa -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lrsa,-lxil,-lgcc,-lc,--end-group  -Wl,--gc-sections
 
-CPU0_SOURCES := $(wildcard src/*cpu0.c)
-CPU1_SOURCES := $(wildcard src/*cpu1.c)
+C_SOURCES := $(wildcard src/*.c)
 S_SOURCES := $(wildcard src/*.S)
 s_SOURCES := $(wildcard src/*.s)
 INCLUDES := $(wildcard inc/*.h)
 OBJS := $(patsubst %.c, %.o, $(c_SOURCES))
 OBJS += $(patsubst %.S, %.o, $(S_SOURCES))
 OBJS += $(patsubst %.s, %.o, $(s_SOURCES))
-OBJS0 := $(patsubst %.c, %.o, $(CPU0_SOURCES))
-OBJS1 := $(patsubst %.c, %.o, $(CPU1_SOURCES))
-LSCRIPT0 := -Tld/lscript-cpu0.ld
-LSCRIPT1 := -Tld/lscript-cpu1.ld
+LSCRIPT := -Tld/lscript.ld
 BIN := bin
 LIB := lib
 
 CURRENT_DIR = $(shell pwd)
 LIBS := ../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
 EXEC0 := cpu0.elf
-EXEC1 := cpu1.elf
 
-INCLUDEPATH := -I../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
-LIBPATH := -L../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
+INCLUDEPATH := -I../../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
+LIBPATH := -L../../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
 
-all: $(BIN) $(LIB) $(EXEC0) $(EXEC1) 
+all: $(BIN) $(LIB) $(EXEC0) 
 
 $(EXEC0): $(LIBS) $(OBJS) $(OBJS0) $(INCLUDES)
 	$(CC)-gcc -o bin/$@ $(OBJS0) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT0)
 	$(CC)-objdump -D bin/$(EXEC0) > bin/$(EXEC0).lst
-	
-$(EXEC1): $(LIBS) $(OBJS) $(OBJS1) $(INCLUDES) 
-	$(CC)-gcc -o bin/$@ $(OBJS1) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT1)
-	$(CC)-objdump -D bin/$(EXEC1) > bin/$(EXEC1).lst
 
 $(LIBS):
 	$(MAKE) -C ../zynq_fsbl_bsp
@@ -48,13 +39,13 @@ $(LIB):
 	mkdir lib
 
 %.o:%.c
-	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
+	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o ../lib/$@ $(INCLUDEPATH)
 
 %.o:%.S
-	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
+	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o ../lib/$@ $(INCLUDEPATH)
 
 %.o:%.s
-	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
+	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o ../lib/$@ $(INCLUDEPATH)
 
 clean:
 	rm -rf lib/$(OBJS) $(LIBS) bin/$(EXEC) bin/$(EXEC).lst
