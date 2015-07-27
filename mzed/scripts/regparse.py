@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 import os
 import argparse
 import sys 
@@ -43,6 +43,22 @@ dict = {"B.4":["AXI_HP",1,0x00000000],
         "B.32":["TTC",2,0xF8001000,0xF8002000],
         "B.33":["UART",2,0xE0000000,0xE0001000],
         "B.34":["USB",0xE0002000,0xE0003000]}
+
+newSection = 0
 for l in lines:
-    if (l[0:2].find("B.") != -1):    
-        print dict[l[0:4].strip()]
+	if(newSection == 1):
+		x = l.split()
+		if (len(x) >2):
+			print "Register: " + x[0] + "  address: " + x[1]
+		else:
+			newSection = -1
+ 
+	if (l[0:2].find("B.") != -1):    
+        	print dict[l[0:4].strip()]
+
+	if (l.find("Register Name  Address  Width  Type  Reset Value  Description") != -1):
+		newSection = 1
+
+
+
+

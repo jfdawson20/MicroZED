@@ -5,26 +5,33 @@ CC_FLAGS :=
 CFLAGS := 
 LN_FLAGS := -lrsa -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lrsa,-lxil,-lgcc,-lc,--end-group  -Wl,--gc-sections
 
-c_SOURCES := $(wildcard *.c)
+CPU0_SOURCES := $(wildcard *cpu0.c)
+CPU1_SOURCES := $(wildcard *cpu1.c)
 S_SOURCES := $(wildcard *.S)
 s_SOURCES := $(wildcard *.s)
 INCLUDES := $(wildcard *.h)
 OBJS := $(patsubst %.c, %.o, $(c_SOURCES))
 OBJS += $(patsubst %.S, %.o, $(S_SOURCES))
 OBJS += $(patsubst %.s, %.o, $(s_SOURCES))
-LSCRIPT := -Tlscript.ld
+LSCRIPT0 := -Tlscript-cpu0.ld
+LSCRIPT1 := -Tlscript-cpu1.ld
 
 CURRENT_DIR = $(shell pwd)
 LIBS := ../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
-EXEC := executable.elf
+EXEC0 := cpu0.elf
+EXEC1 := cpu1.elf
 
 INCLUDEPATH := -I../zynq_fsbl_bsp/ps7_cortexa9_0/include -I.
 LIBPATH := -L../zynq_fsbl_bsp/ps7_cortexa9_0/lib -L./
 
-all: $(EXEC)
+all: $(EXEC0) $(EXEC1)
 
-$(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
-	$(CC) -o $@ $(OBJS) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT)
+$(EXEC0): $(LIBS) $(OBJS) $(OBJS0) $(INCLUDES)
+	$(CC) -o $@ $(OBJS0) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT0)
+
+$(EXEC1): $(LIBS) $(OBJS) $(OBJS1) $(INCLUDES) 
+	$(CC) -o $@ $(OBJS1) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT1)
+	
 
 $(LIBS):
 	$(MAKE) -C ../zynq_fsbl_bsp
