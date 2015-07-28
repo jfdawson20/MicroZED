@@ -11,7 +11,7 @@ all:
 	$(MAKE) -C core1 
 
 clean:
-	$(MAKE) clean -C core0
-	$(MAKE) clean -C core1
+	$(MAKE) -C core0
+	$(MAKE) -C core1
 
 
