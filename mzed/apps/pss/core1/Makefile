@@ -3,7 +3,7 @@
 CC := arm-xilinx-eabi
 CC_FLAGS :=     
 CFLAGS := 
-LN_FLAGS := -lrsa -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lrsa,-lxil,-lgcc,-lc,--end-group  -Wl,--gc-sections
+LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxil,-lgcc,-lc,--end-group  -Wl,--gc-sections
 
 c_SOURCES := $(wildcard *.c)
 S_SOURCES := $(wildcard *.S)
@@ -16,11 +16,11 @@ LSCRIPT := -Tld/lscript-cpu1.ld
 BIN := build
 
 CURRENT_DIR = $(shell pwd)
-LIBS := ../../../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
+LIBS := ../../../standalone_bsp_cpu1/ps7_cortexa9_0/lib/libxil.a
 EXEC := cpu1.elf
 
-INCLUDEPATH := -I../../../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
-LIBPATH := -L../../../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
+INCLUDEPATH := -I../../../standalone_bsp_cpu1/ps7_cortexa9_1/include -Iinc/
+LIBPATH := -L../../../standalone_bsp_cpu1/ps7_cortexa9_1/lib -Llib/
 
 all: $(BIN) $(LIB) $(EXEC) 
 
@@ -30,7 +30,7 @@ $(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
 	$(CC)-objdump -D $(BIN)/$(EXEC) > $(BIN)/$(EXEC).lst
 
 $(LIBS):
-	$(MAKE) -C ../../../zynq_fsbl_bsp
+	$(MAKE) -C ../../../standalone_bsp_cpu1
 
 $(BIN):
 	mkdir $(BIN)

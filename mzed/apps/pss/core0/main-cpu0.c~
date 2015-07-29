@@ -1,0 +1,10 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "xil_printf.h"
+
+int main()
+{
+	int x = 0;
+	printf("Value of X:");
+	return(0);
+}
