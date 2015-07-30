@@ -1,14 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-
-uint32 eth_crc32(struct ethpacket)
-{
-  unsigned int n, crc=0;
-
-  for (n=0; n<sizeof(ethpacket); n++)
-  {
-    crc = (crc >> 4) ^ crc_table[(crc ^ (ethpacket[n] >> 0)) & 0x0F];  /* lower nibble */
-    crc = (crc >> 4) ^ crc_table[(crc ^ (ethpacket[n] >> 4)) & 0x0F];  /* upper nibble */
-  }
-  
-  return crc;
+uint8* CreateEthernetPacket(uint8* sourceMac, uint8* destMac, uint8* ethType, uint8* payload, uint32 size)
+{	
+	uint8* packet; 
+	packet = (uint8*)malloc(sizeof(uint8)*(size+14));
+	
+	memcpy(packet,sourceMac,6);
+	memcpy(packet+6,destMac,6);
+	memcpy(packet+12,ethType,2);
+	memcpy(packet+14,payload,size);
+	
+	return(packet);
 }
+
+
