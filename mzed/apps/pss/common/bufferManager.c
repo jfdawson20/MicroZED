@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include "bufferManager.h"
 /**
  * @file bufferManager.c  
@@ -16,17 +17,17 @@
  * Detailed explanation.
  */
 
-struct packetDescriptorNode* CreateDescriptorList(uint32 size)
+struct packetDescriptorNode* CreateDescriptorList(uint32_t size)
 {
 	/* variable decs */
         struct packetDescriptorNode* temp; 
         struct packetDescriptorNode* prev; 
         struct packetDescriptorNode* head; 
-	uint32* packetDescriptorList;
-	int i,descriptorIndex;
+	uint32_t* packetDescriptorList;
+	uint32_t i,descriptorIndex;
 	
 	/* Create Packet Descriptor array in memory */
-	packetDescriptorList = (uint32*)malloc(sizeof(uint32)*size*2);
+	packetDescriptorList = (uint32_t*)malloc(sizeof(uint32_t)*size*2);
 	descriptorIndex = 2;
 
 	/* allocate head */	
