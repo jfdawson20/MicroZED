@@ -5,13 +5,46 @@ CC_FLAGS :=
 CFLAGS := 
 LN_FLAGS := -lrsa -Wl,--start-group,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lxilffs,-lxil,-lgcc,-lc,--end-group -Wl,--start-group,-lrsa,-lxil,-lgcc,-lc,--end-group  -Wl,--gc-sections
 
+c_SOURCES := $(wildcard *.c)
+S_SOURCES := $(wildcard *.S)
+s_SOURCES := $(wildcard *.s)
+INCLUDES := $(wildcard inc/*.h)
+OBJS := $(patsubst %.c, %.o, $(c_SOURCES))
+OBJS += $(patsubst %.S, %.o, $(S_SOURCES))
+OBJS += $(patsubst %.s, %.o, $(s_SOURCES))
+LSCRIPT := -Tld/lscript-cpu0.ld
+BIN := build
 
-all: 
-	$(MAKE) -C core0
-	$(MAKE) -C core1 
+CURRENT_DIR = $(shell pwd)
+LIBS := ../../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
+EXEC := cpu0.elf
+
+INCLUDEPATH := -I../../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
+LIBPATH := -L../../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
+
+all: $(BIN) $(LIB) $(EXEC) 
+
+$(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
+	echo "staring main  compile"
+	$(CC)-gcc -o $(BIN)/$@ $(OBJS) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT)
+	$(CC)-objdump -D $(BIN)/$(EXEC) > $(BIN)/$(EXEC).lst
+
+$(LIBS):
+	$(MAKE) -C ../../zynq_fsbl_bsp
+
+$(BIN):
+	mkdir $(BIN)
+
+%.o:%.c
+	echo "staring c compile"
+	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
+
+%.o:%.S
+	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
+
+%.o:%.s
+	$(CC)-gcc $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
 
 clean:
-	$(MAKE) clean -C core0
-	$(MAKE) clean -C core1
-
+	rm -rf $(OBJS) $(LIBS) build/$(EXEC) build/$(EXEC).lst
 
