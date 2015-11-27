@@ -17,8 +17,8 @@ BIN := build
 
 CURRENT_DIR = $(shell pwd)
 LIBS := ../../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
-EXEC := cpu0.elf
-EXECH := cpu0
+EXEC := liteloader.elf
+EXECH := liteloader
 
 INCLUDEPATH := -I../../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
 LIBPATH := -L../../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
@@ -29,7 +29,7 @@ $(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
 	echo "staring main  compile"
 	$(CC)-gcc -o $(BIN)/$@ $(OBJS) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT)
 	$(CC)-objdump -D $(BIN)/$(EXEC) > $(BIN)/$(EXEC).lst
-	$(CC)-objcopy -O ihex $(BIN)/$(EXEC) $(BIN)/$(EXECH).bin 
+	$(CC)-objcopy -O ihex $(BIN)/$(EXEC) $(BIN)/$(EXECH).hex
 
 $(LIBS):
 	$(MAKE) -C ../../zynq_fsbl_bsp

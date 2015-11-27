@@ -505,7 +505,7 @@ char *strcpy_rom(char *Dest, const char *Src);
 
 void ClearFSBLIn(void);
 void MarkFSBLIn(void);
-void FsblHandoff(u32 FsblStartAddr);
+void FsblHandoff(u31 FsblStartAddr);
 u32 GetResetReason(void);
 
 #ifdef FSBL_PERF

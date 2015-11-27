@@ -12,27 +12,27 @@ INCLUDES := $(wildcard inc/*.h)
 OBJS := $(patsubst %.c, %.o, $(c_SOURCES))
 OBJS += $(patsubst %.S, %.o, $(S_SOURCES))
 OBJS += $(patsubst %.s, %.o, $(s_SOURCES))
-LSCRIPT := -Tld/lscript-cpu0.ld
+LSCRIPT := -Tld/simple.ld
 BIN := build
 
 CURRENT_DIR = $(shell pwd)
-LIBS := ../../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
-EXEC := cpu0.elf
-EXECH := cpu0
+#LIBS := ../../zynq_fsbl_bsp/ps7_cortexa9_0/lib/libxil.a
+EXEC := testapp.elf
+EXECH := testapp
 
-INCLUDEPATH := -I../../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
-LIBPATH := -L../../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
+#INCLUDEPATH := -I../../zynq_fsbl_bsp/ps7_cortexa9_0/include -Iinc/
+#LIBPATH := -L../../zynq_fsbl_bsp/ps7_cortexa9_0/lib -Llib/
 
-all: $(BIN) $(LIB) $(EXEC) 
+all: $(BIN) $(EXEC) 
 
 $(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
 	echo "staring main  compile"
 	$(CC)-gcc -o $(BIN)/$@ $(OBJS) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT)
 	$(CC)-objdump -D $(BIN)/$(EXEC) > $(BIN)/$(EXEC).lst
-	$(CC)-objcopy -O ihex $(BIN)/$(EXEC) $(BIN)/$(EXECH).bin 
+	$(CC)-objcopy -O ihex $(BIN)/$(EXEC) $(BIN)/$(EXECH).hex
 
-$(LIBS):
-	$(MAKE) -C ../../zynq_fsbl_bsp
+#$(LIBS):
+#	$(MAKE) -C ../../zynq_fsbl_bsp
 
 $(BIN):
 	mkdir $(BIN)

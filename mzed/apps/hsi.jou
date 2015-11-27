@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# hsi v2014.4 (64-bit)
+# SW Build 1071353 on Tue Nov 18 16:48:31 MST 2014
+# 
+# Start of session at: Fri Sep  4 11:44:57 2015
+# Process ID: 18022
+# Log file: /home/jack/Sandbox/MicroZED/mzed/apps/hsi.log
+# Journal file: /home/jack/Sandbox/MicroZED/mzed/apps/hsi.jou
+#-----------------------------------------------------------
+about
+help
+help -category -Tools
+help -category Tools

@@ -1,0 +1,4 @@
+image : {
+	[bootloader]fsbl.elf
+	[load=0x00100000]liteloader.elf
+}

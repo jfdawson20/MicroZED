@@ -46,10 +46,10 @@ uint32_t D_IdentifyPhys(uint8_t clause)
 	uint16_t reg = 0;
 	for (i =0;i<32;i++)
 	{
-		printf("Register Address %x\n",i);
+		printf("Register Address %d\n",i);
 		reg = ReadPhyRegister(0,i,clause);
 
-		printf("\tDevice Register %x\n\n",reg);
+		printf("\tDevice Register %x\n",reg);
 	}
 	return (0);
 } 
